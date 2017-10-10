@@ -227,7 +227,7 @@ ACCESS_LOCATION_PERMISSION_CODE with the following code:
 
 1) Add a floating action button to the Maps view at the right bottom.
 
-2) Implement the *onClick* listener for the Add Button that redirects to another Activity where the user can add a new Location to the map. A location has a name, a description and a geolocation (longitude and latituted).
+2) Implement the *onClick* listener for the Add Button that redirects to another Activity where the user can add a new Location to the map. A location has a name, a description and a geolocation (longitude and latitude).
 
 3) Create a form that captures the Location data and add a save button that validates the form and submits the data.
 
