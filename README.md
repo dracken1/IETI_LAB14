@@ -115,6 +115,8 @@ ACCESS_LOCATION_PERMISSION_CODE with the following code:
 
 1) Add a button at the bottom of the map with the label “find address”
 
+![Alt text](https://github.com/COSW-ECI/android-geolocation-api/blob/master/images/map.png)
+
 2) Include the Google Play Services Library on your build.gradle file:
        
     ````Gradle
@@ -220,3 +222,15 @@ ACCESS_LOCATION_PERMISSION_CODE with the following code:
         <service
          android:name=".FetchAddressIntentService"
          android:exported="false" />
+         
+### Part 4: Implement an add location form ###         
+
+1) Add a floating action button to the Maps view at the right bottom.
+
+2) Implement an *onClick* listener for the Add Button that redirects to another Activity where the user can add a Location to the map.
+
+A location has a name, a description and a geolocation (longitude and latituted).
+
+3) Once the user creates a new Location then the Application should take you back to the map and displayed the created locations.
+
+
