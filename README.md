@@ -120,6 +120,10 @@ https://developer.android.com/training/location/receive-location-updates
 
 ### Part 3: Using the GoogleApiClient and Geolocation API ###
 
+Before you get started read and understand the documentation:
+
+https://developer.android.com/training/location/display-address
+
 1) Add a button at the bottom of the map with the label “find address”
 
 ![Alt text](https://github.com/COSW-ECI/android-geolocation-api/blob/master/images/map.png)
