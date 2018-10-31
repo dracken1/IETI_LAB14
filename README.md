@@ -10,9 +10,12 @@ https://developers.google.com/maps/documentation/android-api/start
 
 ### Part 2: Accessing the Map object and showing User's location ###
 
-1) Make your activity implement the OnMapReadyCallback interface. This interface will allow you to know when the map is ready to use when the onMapReady method is called.
+1) Read the documentation about how to get user's last location:
+    https://developer.android.com/training/location/retrieve-current
+    
+2) Make your activity implement the OnMapReadyCallback interface. This interface will allow you to know when the map is ready to use when the onMapReady method is called.
 
-2) Retrieve SupportMapFragment and retrieve the map asynchronously sending the activity as parameter to be the callback:
+3) Retrieve SupportMapFragment and retrieve the map asynchronously sending the activity as parameter to be the callback:
 
     ```` java
     // Obtain the SupportMapFragment and get notified when the map is ready to be used.
@@ -21,7 +24,7 @@ https://developers.google.com/maps/documentation/android-api/start
     mapFragment.getMapAsync( this );
     ````
 
-3) Create another field for the GoogleMap object on the Activity and save it when the onMapReady method is called:
+4) Create another field for the GoogleMap object on the Activity and save it when the onMapReady method is called:
 
     ```` java
     @Override
@@ -31,7 +34,7 @@ https://developers.google.com/maps/documentation/android-api/start
     }
     ```` 
 
-4) Create a method that shows your current location and another to check for the user permission to access the location with the following code:
+5) Create a method that shows your current location and another to check for the user permission to access the location with the following code:
 
     ```java
         public void showMyLocation()
@@ -71,7 +74,7 @@ https://developers.google.com/maps/documentation/android-api/start
     ``` 
 
 
-5) Create the method addMarkerAndZoom in the main Activity:
+6) Create the method addMarkerAndZoom in the main Activity:
 
     ```` Java
     public void addMarkerAndZoom( Location location, String title, int zoom  )
@@ -83,7 +86,7 @@ https://developers.google.com/maps/documentation/android-api/start
     ```` 
 
 
-6) Override the *onRequestPermissionsResult* method and check for the 
+7) Override the *onRequestPermissionsResult* method and check for the 
 ACCESS_LOCATION_PERMISSION_CODE with the following code:
 
 ```` Java
@@ -109,7 +112,11 @@ ACCESS_LOCATION_PERMISSION_CODE with the following code:
     }
 ````
 
-7) Test the application on a real device and make sure your location is shown.
+8) Test the application on a real device and make sure your location is shown.
+
+9) Sometimes lastLocation returns null. Therefore you can use the *FusedLocationClient* to actively retrieve the user location. Take a look at the documentation:
+
+https://developer.android.com/training/location/receive-location-updates
 
 ### Part 3: Using the GoogleApiClient and Geolocation API ###
 
