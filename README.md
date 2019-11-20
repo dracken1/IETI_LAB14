@@ -137,63 +137,15 @@ https://developer.android.com/training/location/display-address
 
 ![Alt text](https://github.com/COSW-ECI/android-geolocation-api/blob/master/images/map.png)
 
-2) Include the Google Play Services Library on your build.gradle file:
+2) Add an EditText with the id address to the top of the Map view where the address will be displayed.
+
+3) Include the Google Play Services Library on your build.gradle file:
        
     ````Gradle
         implementation 'com.google.android.gms:play-services-location:17.0.0'
     ````
 
-3) Declare a GoogleApiClient field on the main activity and instantiate it on the onCreate method:
-
-    ````Java
-        //Configure Google Maps API Objects
-        googleApiClient = new GoogleApiClient.Builder( this ).addConnectionCallbacks( this ).
-        addOnConnectionFailedListener( this ).addApi( LocationServices.API ).build();
-        locationRequest.setInterval( 10000 );
-        locationRequest.setFastestInterval( 5000 );
-        locationRequest.setPriority( LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY );
-        googleApiClient.connect();
-    ````
-
-4) Make the main Activity Implement the *GoogleApiClient.ConnectionCallbacks* with the following code:
-
-    ````Java
-        @Override
-        public void onConnected( @Nullable Bundle bundle )
-        {
-          LocationServices.FusedLocationApi.requestLocationUpdates( googleApiClient, locationRequest,
-                                                                     new LocationListener()
-                                                                     {
-                                                                         @Override
-                                                                         public void onLocationChanged( Location location )
-                                                                         {
-                                                                             showMyLocation();
-                                                                             stopLocationUpdates();
-                                                                         }
-                                                                     } );
-        
-        }
-        
-        @Override
-        public void onConnectionSuspended( int i )
-        {
-           LocationServices.FusedLocationApi.removeLocationUpdates( googleApiClient, null);
-        }
-        
-        public void stopLocationUpdates()
-        {
-           LocationServices.FusedLocationApi.removeLocationUpdates( googleApiClient, new LocationListener()
-           {
-               @Override
-               public void onLocationChanged( Location location )
-               {
-        
-               }
-           } );
-        }
-    ````
-
-5) Create a method that handles the *onClick* event from the Find Address button with the following code:
+4) Create a method that handles the *onClick* event from the Find Address button with the following code:
 
     ````Java
         public void onFindAddressClicked( View view )
@@ -202,47 +154,53 @@ https://developer.android.com/training/location/display-address
         }
         public void startFetchAddressIntentService()
         {
-           Location lastLocation = LocationServices.FusedLocationApi.getLastLocation( googleApiClient );
-           if ( lastLocation != null )
-           {
-               AddressResultReceiver addressResultReceiver = new AddressResultReceiver( new Handler() );
-               addressResultReceiver.setAddressResultListener( new AddressResultListener()
-               {
-                   @Override
-                   public void onAddressFound( final String address )
-                   {
-                       runOnUiThread( new Runnable()
-                       {
-                           @Override
-                           public void run()
-                           {
-                               MapsActivity.this.address.setText( address );
-                               MapsActivity.this.address.setVisibility( View.VISIBLE );
-                           }
-                       } );
-        
-        
-                   }
-               } );
-               Intent intent = new Intent( this, FetchAddressIntentService.class );
-               intent.putExtra( FetchAddressIntentService.RECEIVER, addressResultReceiver );
-               intent.putExtra( FetchAddressIntentService.LOCATION_DATA_EXTRA, lastLocation );
-               startService( intent );
-           }
-        }
+          fusedLocationClient.getLastLocation()
+            .addOnSuccessListener(this, new OnSuccessListener<Location>() {
+                @Override
+                public void onSuccess(Location location) {
+                    if ( location != null )
+                    {
+                        AddressResultReceiver addressResultReceiver = new AddressResultReceiver( new Handler() );
+                        addressResultReceiver.setAddressResultListener( new AddressResultListener()
+                        {
+                            @Override
+                            public void onAddressFound( final String address )
+                            {
+                                runOnUiThread( new Runnable()
+                                {
+                                    @Override
+                                    public void run()
+                                    {
+                                        MapsActivity.this.address.setText( address );
+                                        MapsActivity.this.address.setVisibility( View.VISIBLE );
+                                    }
+                                } );
+
+
+                            }
+                        } );
+                        Intent intent = new Intent( MapsActivity.this, FetchAddressIntentService.class );
+                        intent.putExtra( FetchAddressIntentService.RECEIVER, addressResultReceiver );
+                        intent.putExtra( FetchAddressIntentService.LOCATION_DATA_EXTRA, location );
+                        startService( intent );
+                    }
+                }
+            });
         }
    ````
    
-6) To be able to run the project you will need the following classes *AddressResultReceiver*,  *AddressResultListener* and *FetchAddressIntentService*. In the following url you will be able to find a project that contains the missing classes:
+5) To be able to run the project you will need the following classes *AddressResultReceiver*,  *AddressResultListener* and *FetchAddressIntentService*. In the following url you will be able to find a project that contains the missing classes:
 
     https://github.com/sancarbar/android-maps-demo
     
-7) Include the service you created in the *AndroidManifest* file (below the </activity> closing tag):
+6) Include the service you created in the *AndroidManifest* file (below the </activity> closing tag):
     ````xml
         <service
          android:name=".FetchAddressIntentService"
          android:exported="false" />
-         
+
+7) Verify that it works and the address is displayed correctly.
+
 ### Part 4: Implement Add location feature ###         
 
 1) Add a floating action button to the Maps view at the right bottom.
@@ -252,6 +210,6 @@ Tip: You should use *startActivityForResult()* https://developer.android.com/tra
 
 3) Create a form that captures the Location data and add a save button that validates the form and submits the data.
 
-3) Once the user creates a new Location then the Application should take you back to the map and displayed the created location.
+4) Once the user creates a new Location then the Application should take you back to the map and displayed the created location.
 
 
