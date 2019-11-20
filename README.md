@@ -47,11 +47,17 @@ https://developers.google.com/maps/documentation/android-api/start
                {
                    googleMap.setMyLocationEnabled( true );
         
-                   Location lastLocation = LocationServices.FusedLocationApi.getLastLocation( googleApiClient );
-                   if ( lastLocation != null )
-                   {
-                       addMarkerAndZoom( lastLocation, "My Location", 15 );
-                   }
+                   FusedLocationProviderClient fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
+                   fusedLocationClient.getLastLocation()
+                    .addOnSuccessListener(this, new OnSuccessListener<Location>() {
+                        @Override
+                        public void onSuccess(Location location) {
+                            // Got last known location. In some rare situations this can be null.
+                            if (location != null) {
+                                addMarkerAndZoom( location, "My Location", 15 );
+                            }
+                        }
+                    });
                }
                else
                {
@@ -90,6 +96,9 @@ https://developers.google.com/maps/documentation/android-api/start
 ACCESS_LOCATION_PERMISSION_CODE with the following code:
 
 ```` Java
+
+    private final int ACCESS_LOCATION_PERMISSION_CODE = 44;
+
     @Override
     public void onRequestPermissionsResult( int requestCode, @NonNull String[] permissions,
                                            @NonNull int[] grantResults )
@@ -131,7 +140,7 @@ https://developer.android.com/training/location/display-address
 2) Include the Google Play Services Library on your build.gradle file:
        
     ````Gradle
-        compile 'com.google.android.gms:play-services:10.2.1'
+        implementation 'com.google.android.gms:play-services-location:17.0.0'
     ````
 
 3) Declare a GoogleApiClient field on the main activity and instantiate it on the onCreate method:
@@ -239,6 +248,7 @@ https://developer.android.com/training/location/display-address
 1) Add a floating action button to the Maps view at the right bottom.
 
 2) Implement the *onClick* listener for the Add Button that redirects to another Activity where the user can add a new Location to the map. A location has a name, a description and a geolocation (longitude and latitude).
+Tip: You should use *startActivityForResult()* https://developer.android.com/training/basics/intents/result
 
 3) Create a form that captures the Location data and add a save button that validates the form and submits the data.
 
