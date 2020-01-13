@@ -1,5 +1,5 @@
 
-# Android Geolocation API and Google Maps #
+# 3.4 Android Geolocation API and Google Maps
 
 ### Part 1:  Create a basic Android Map Application ###
 
