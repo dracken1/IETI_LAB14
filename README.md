@@ -1,4 +1,4 @@
-# IETI_LAB14 - Create an Android project
+# IETI_LAB14 - Android Geolocation API and Google Maps
 # Build with
 El proyecto se desarrollo usando Android Studio.
 
